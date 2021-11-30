@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:wannaanime/common/colors_brightness.dart';
 import 'package:wannaanime/domain/entities/anime_entity.dart';
 import 'package:wannaanime/presentation/providers/anime_provider.dart';
+import 'package:wannaanime/presentation/providers/global_provider.dart';
 import 'package:wannaanime/presentation/theme.dart';
+import 'package:wannaanime/presentation/ui/loading.dart';
 import 'package:wannaanime/presentation/widgets/cached_network_image.dart';
 
 
@@ -17,10 +19,14 @@ class Animecard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final animeProvider = AnimeProvider.of(context, listen: false);
-
+    final globalProvider = GlobalProvider.of(context, listen: false);
     return GestureDetector(
-      onTap: () {
+      onTap: () async {
         animeProvider.anime = anime;
+        print(anime);
+        await Loading.show(context, () async {
+          animeProvider.characters = await globalProvider.fetchCharacterByAnime(anime.id);
+        });
         Navigator.pushNamed(context, '/anime');
       },
       child: Container(

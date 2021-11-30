@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:wannaanime/data/services/services.dart';
 import 'package:wannaanime/domain/dto/anime_dto.dart';
 import 'package:wannaanime/domain/dto/animes_dto.dart';
@@ -23,9 +25,9 @@ class ApiRepositoryImpl extends ApiRepository {
   }
 
   @override
-  Future<List<AnimeEntity>> getAnimes({int start = 0, int end = 20, String search = ''}) async {
+  Future<List<AnimeEntity>> getAnimes({int start = 1, int end = 20, String search = ''}) async {
     AnimesDTO dto = await Services.getAnimes(start: start, end: end, search: search);
-
+    log(dto.message);
     if (dto.statusCode == 200) {
       return dto.toAnimes()!;
     } else {
@@ -34,7 +36,7 @@ class ApiRepositoryImpl extends ApiRepository {
   }
 
   @override
-  Future<List<AnimeEntity>> getTrendingAnimes({int start = 0, int end = 20}) async {
+  Future<List<AnimeEntity>> getTrendingAnimes({int start = 1, int end = 20}) async {
     AnimesDTO dto = await Services.getTrendingAnimes(start: start, end: end);
 
     if (dto.statusCode == 200) {

@@ -4,7 +4,7 @@ import 'package:wannaanime/domain/entities/streamer_entity.dart';
 import 'package:wannaanime/domain/entities/streaming_entity.dart';
 
 abstract class ApiRepository {
-  Future<List<AnimeEntity>> getAnimes({int start = 0, int end = 20, String search = ''});
+  Future<List<AnimeEntity>> getAnimes({int start = 1, int end = 20, String search = ''});
 
   Future<List<AnimeEntity>> getTrendingAnimes();
 

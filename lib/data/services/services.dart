@@ -12,7 +12,7 @@ class Services {
   static const String baseUrl = "https://kitsu.io/api/edge";
 
   static Future<AnimesDTO> getAnimes({int start = 1, int end = 20, String search = ''}) async {
-    final uri = Uri.parse("$baseUrl/anime?page[limit]=$end&page[offset]=$start");
+    final uri = Uri.parse("$baseUrl/anime?page[limit]=$end&page[offset]=$start${search.isEmpty ? '' : '&filter[text]=$search'}");
 
     final response = await http.get(
       uri,
@@ -21,7 +21,6 @@ class Services {
         'Accept': 'application/vnd.api+json',
       },
     );
-
     if (response.statusCode == 200) {
       return AnimesDTO(message: 'Animes fetches successfully', statusCode: 200, animes: response.bodyBytes);
     } else {

@@ -60,6 +60,13 @@ class GlobalProvider extends ChangeNotifier {
     return _streamingsAnime[id]!;
   }
 
+  Future<List<AnimeEntity>> searchAnime(String name) async{
+    List<AnimeEntity> result = await _apiRepository.getAnimes(search: name.trim());
+
+    animes.addAll(result.where((element) => animes.where((anime) => anime.id == element.id).isEmpty).toList());
+
+    return result;
+  }
   static GlobalProvider of(BuildContext context, {listen = true}) => Provider.of<GlobalProvider>(context, listen: listen);
 
   notify(){

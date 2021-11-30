@@ -52,8 +52,8 @@ class Navbar extends StatelessWidget {
                 ),
                 NavButton(
                   icon: LookeaIcons.feedback,
-                  isActive: currentIndex == 3,
-                  onTap: () => onChange?.call(3),
+                  isActive: currentIndex == 4,
+                  onTap: () => onChange?.call(4),
                 ),
               ],
             )

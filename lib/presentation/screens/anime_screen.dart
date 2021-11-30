@@ -43,6 +43,9 @@ class _AnimeScreenState extends State<AnimeScreen> {
 
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
       AnimeEntity anime = animeProvider.anime;
+      if(anime.id.isEmpty) {
+        return Navigator.pop(context);
+      }
       if(anime.youtubeVideoId != null){
         playerController= YoutubePlayerController(
           initialVideoId: anime.youtubeVideoId!,
@@ -51,8 +54,6 @@ class _AnimeScreenState extends State<AnimeScreen> {
           ),
         );
       }
-
-      animeProvider.characters = await provider.fetchCharacterByAnime(anime.id);
 
       PaletteGenerator colors = await PaletteGenerator.fromImageProvider(
         CachedNetworkImageProvider(anime.posterImage),

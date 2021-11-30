@@ -9,7 +9,9 @@ class AnimeProvider extends ChangeNotifier {
   AnimeEntity? _anime;
   List<CharacterEntity>? _characters;
 
-  AnimeEntity get anime => _anime!;
+  AnimeEntity get anime {
+    return _anime ?? AnimeEntity(id: "", type: "", createdAt: DateTime.now(), updatedAt: DateTime.now(), slug: "", synopsis: "", description: "", titles: {}, canonicalTitle: "", abbreviatedTitles: [], favoritesCount: 0, startDate: DateTime.now(), endDate: DateTime.now(), popularityRank: 0, subtype: "", status: "", posterImage: "", episodeCount: 0, showType: "", nsfw: false);
+  }
 
   List<CharacterEntity> get characters => _characters ?? [];
 

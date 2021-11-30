@@ -11,14 +11,14 @@ class AnimeEntity {
   final Map<String, String> titles;
   final String canonicalTitle;
   final List<String> abbreviatedTitles;
-  final String averageRating;
+  final String? averageRating;
   final int favoritesCount;
   final DateTime startDate;
   final DateTime? endDate;
   final DateTime? nextRelease;
   final int popularityRank;
-  final int ratingRank;
-  final String ageRating;
+  final int? ratingRank;
+  final String? ageRating;
   final String? ageRatingGuide;
   final String subtype;
   final String status;
@@ -26,7 +26,7 @@ class AnimeEntity {
   final String? coverImage;
   final int? episodeCount;
   final int? episodeLength;
-  final int totalLength;
+  final int? totalLength;
   final String? youtubeVideoId;
   final String showType;
   final bool nsfw;
@@ -42,22 +42,22 @@ class AnimeEntity {
     required this.titles,
     required this.canonicalTitle,
     required this.abbreviatedTitles,
-    required this.averageRating,
+    this.averageRating,
     required this.favoritesCount,
     required this.startDate,
     required this.endDate,
     this.nextRelease,
     required this.popularityRank,
-    required this.ratingRank,
-    required this.ageRating,
-    required this.ageRatingGuide,
+    this.ratingRank,
+    this.ageRating,
+    this.ageRatingGuide,
     required this.subtype,
     required this.status,
     required this.posterImage,
     this.coverImage,
     required this.episodeCount,
     this.episodeLength,
-    required this.totalLength,
+    this.totalLength,
     this.youtubeVideoId,
     required this.showType,
     required this.nsfw,
@@ -106,7 +106,7 @@ class AnimeEntity {
       slug: map['attributes']['slug'],
       synopsis: map['attributes']['synopsis'],
       description: map['attributes']['description'],
-      titles: Map<String, String>.from(map['attributes']['titles']),
+      titles: (map['attributes']['titles']..removeWhere((_, v) => v == null)).cast<String, String>(),
       canonicalTitle: map['attributes']['canonicalTitle'],
       abbreviatedTitles: List<String>.from(map['attributes']['abbreviatedTitles']),
       averageRating: map['attributes']['averageRating'],

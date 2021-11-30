@@ -7,11 +7,9 @@ void main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
 
-
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp
   ]);
-
 
   runApp(
     const Injector(

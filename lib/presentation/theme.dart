@@ -11,7 +11,7 @@ class AppTheme {
 
 
   static final lightTheme = ThemeData(
-    textTheme: GoogleFonts.poppinsTextTheme().apply(
+    textTheme: GoogleFonts.rubikTextTheme().apply(
       bodyColor: primaryTextColor,
       displayColor: primaryTextColor,
     ),
