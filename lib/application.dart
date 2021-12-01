@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/src/provider.dart';
+import 'package:wannaanime/presentation/providers/global_provider.dart';
 import 'package:wannaanime/presentation/screens/anime_screen.dart';
 import 'package:wannaanime/presentation/screens/home_screen.dart';
+import 'package:wannaanime/presentation/screens/manga_screen.dart';
 import 'package:wannaanime/presentation/screens/splash_screen.dart';
 import 'package:wannaanime/presentation/theme.dart';
 
@@ -9,6 +12,7 @@ class Application extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final homeKey = context.watch<GlobalProvider>().homeScreenKey;
     return MaterialApp(
       title: 'WannaAnime',
       theme: AppTheme.lightTheme,
@@ -17,8 +21,9 @@ class Application extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => const SplashScreen(),
-        '/home': (context) => const HomeScreen(),
+        '/home': (context) => HomeScreen(key: homeKey,),
         '/anime': (context) => const AnimeScreen(),
+        '/manga': (context) => const MangaScreen(),
       },
       builder: (context, child) {
         final mediaQueryData = MediaQuery.of(context);

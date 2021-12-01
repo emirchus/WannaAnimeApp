@@ -36,19 +36,14 @@ class Navbar extends StatelessWidget {
                   onTap: () => onChange?.call(0),
                 ),
                 NavButton(
-                  icon: LookeaIcons.search,
+                  icon: LookeaIcons.book,
                   isActive: currentIndex == 1,
                   onTap: () => onChange?.call(1),
                 ),
                 NavButton(
-                  icon: LookeaIcons.book,
+                  icon: LookeaIcons.dice_two,
                   isActive: currentIndex == 2,
                   onTap: () => onChange?.call(2),
-                ),
-                NavButton(
-                  icon: LookeaIcons.dice_two,
-                  isActive: currentIndex == 3,
-                  onTap: () => onChange?.call(3),
                 ),
                 NavButton(
                   icon: LookeaIcons.feedback,

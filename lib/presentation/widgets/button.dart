@@ -26,6 +26,7 @@ class ButtonComponent extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(icon, color: secondary ?? Theme.of(context).textTheme.button!.color),
+          const SizedBox(width: 8),
           Text(text, style: Theme.of(context).textTheme.button!.copyWith(
             color: secondary,
             fontWeight: FontWeight.bold

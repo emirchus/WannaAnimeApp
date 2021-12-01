@@ -10,26 +10,28 @@ class AnimeEntity {
   final String description;
   final Map<String, String> titles;
   final String canonicalTitle;
-  final List<String> abbreviatedTitles;
-  final String? averageRating;
+  List<String> abbreviatedTitles;
+  String? averageRating;
   final int favoritesCount;
   final DateTime startDate;
-  final DateTime? endDate;
-  final DateTime? nextRelease;
+  DateTime? endDate;
+  DateTime? nextRelease;
   final int popularityRank;
-  final int? ratingRank;
-  final String? ageRating;
-  final String? ageRatingGuide;
+  int? ratingRank;
+  String? ageRating;
+  String? ageRatingGuide;
   final String subtype;
   final String status;
   final String posterImage;
-  final String? coverImage;
-  final int? episodeCount;
-  final int? episodeLength;
-  final int? totalLength;
-  final String? youtubeVideoId;
+  String? coverImage;
+  int? episodeCount;
+  int? episodeLength;
+  int? totalLength;
+  String? youtubeVideoId;
   final String showType;
   final bool nsfw;
+
+  final bool placeholder;
 
   AnimeEntity({
     required this.id,
@@ -61,7 +63,9 @@ class AnimeEntity {
     this.youtubeVideoId,
     required this.showType,
     required this.nsfw,
-  });
+  }) : placeholder = false;
+
+  AnimeEntity.placeholder() : id = '', type = '', createdAt = DateTime.now(), updatedAt = DateTime.now(), slug = '', synopsis = '', description = '', titles = {}, canonicalTitle = '', abbreviatedTitles = [], averageRating = '', favoritesCount = 0, startDate = DateTime.now(), endDate = null, nextRelease = null, popularityRank = 0, subtype = '', status = '', posterImage = '', coverImage = '', showType = '', nsfw = false, placeholder = true;
 
   Map<String, dynamic> toMap() {
     return {

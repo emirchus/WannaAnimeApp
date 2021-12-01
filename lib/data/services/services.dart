@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:wannaanime/domain/dto/anime_dto.dart';
 import 'package:wannaanime/domain/dto/animes_dto.dart';
 import 'package:wannaanime/domain/dto/characters_dto.dart';
+import 'package:wannaanime/domain/dto/manga_dto.dart';
 import 'package:wannaanime/domain/dto/streamers_dto.dart';
 import 'package:wannaanime/domain/dto/streamings_dto.dart';
 
@@ -110,6 +111,42 @@ class Services {
       dynamic resBody = json.decode(response.body);
       log(resBody['errors'][0]['detail']);
       return AnimeDTO(message: resBody['errors'][0]['detail'], statusCode: response.statusCode);
+    }
+  }
+
+  static Future<MangasDTO> getMangas({int start = 1, int end = 20, String search = ''}) async {
+    final uri = Uri.parse("$baseUrl/manga?page[limit]=$end&page[offset]=$start${search.isEmpty ? '' : '&filter[text]=$search'}");
+
+    final response = await http.get(
+      uri,
+      headers: {
+        'Content-Type': 'application/vnd.api+json',
+        'Accept': 'application/vnd.api+json',
+      },
+    );
+    if (response.statusCode == 200) {
+      return MangasDTO(message: 'Mangas fetches successfully', statusCode: 200, mangas: response.bodyBytes);
+    } else {
+      dynamic resBody = json.decode(response.body);
+      return MangasDTO(message: resBody['errors'][0]['title'], statusCode: response.statusCode);
+    }
+  }
+
+    static Future<MangasDTO> getTrendingMangas() async {
+    final uri = Uri.parse("$baseUrl/trending/manga");
+
+    final response = await http.get(
+      uri,
+      headers: {
+        'Content-Type': 'application/vnd.api+json',
+        'Accept': 'application/vnd.api+json',
+      },
+    );
+    if (response.statusCode == 200) {
+      return MangasDTO(message: 'Mangas fetches successfully', statusCode: 200, mangas: response.bodyBytes);
+    } else {
+      dynamic resBody = json.decode(response.body);
+      return MangasDTO(message: resBody['errors'][0]['title'], statusCode: response.statusCode);
     }
   }
 }

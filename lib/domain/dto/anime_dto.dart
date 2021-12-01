@@ -18,6 +18,7 @@ class AnimeDTO {
 extension AnimeMapper on AnimeDTO {
   AnimeEntity? toEntity() {
     if (anime == null) return null;
-    return AnimeEntity.fromJson(json.decode(utf8.decode(anime!)));
+    var decode = json.decode(utf8.decode(anime!));
+    return AnimeEntity.fromMap(decode['data']);
   }
 }

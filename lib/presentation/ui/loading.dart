@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:wannaanime/presentation/providers/global_provider.dart';
 
 class Loading extends StatefulWidget {
   final Future<void> Function() future;

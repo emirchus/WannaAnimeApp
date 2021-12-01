@@ -9,6 +9,21 @@ class AppTheme {
   static const Color logoRed = Color(0xFFF34323);
   static const Color logoBlue = Color(0xFF1ba4dc);
 
+  static const skeletonGradient = LinearGradient(
+    colors: [
+      Color(0xFFEBEBF4),
+      Color(0xFFF4F4F4),
+      Color(0xFFEBEBF4),
+    ],
+    stops: [
+      0.1,
+      0.3,
+      0.4,
+    ],
+    begin: Alignment(-1.0, -0.3),
+    end: Alignment(1.0, 0.3),
+    tileMode: TileMode.clamp,
+  );
 
   static final lightTheme = ThemeData(
     textTheme: GoogleFonts.rubikTextTheme().apply(

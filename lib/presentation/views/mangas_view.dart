@@ -1,22 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:provider/src/provider.dart';
-import 'package:wannaanime/domain/entities/anime_entity.dart';
+import 'package:wannaanime/domain/entities/manga_entity.dart';
 import 'package:wannaanime/presentation/providers/global_provider.dart';
 import 'package:wannaanime/presentation/theme.dart';
-import 'package:wannaanime/presentation/widgets/anime_card.dart';
-import 'package:wannaanime/presentation/widgets/anime_horizontal_list.dart';
+import 'package:wannaanime/presentation/widgets/manga_card.dart';
+import 'package:wannaanime/presentation/widgets/mangas_horizontal_list.dart';
 import 'package:wannaanime/presentation/widgets/skeleton.dart';
 
 
-class HomeView extends StatefulWidget {
-
-  const HomeView({Key? key}) : super(key: key);
+class MangasView extends StatefulWidget {
+  const MangasView({Key? key}) : super(key: key);
 
   @override
-  State<HomeView> createState() => HomeViewState();
+  State<MangasView> createState() => MangasViewState();
 }
 
-class HomeViewState extends State<HomeView> {
+class MangasViewState extends State<MangasView> {
   late GlobalProvider provider;
   final ScrollController scrollController = ScrollController();
 
@@ -31,7 +30,7 @@ class HomeViewState extends State<HomeView> {
 
   void onScroll() async {
     if (scrollController.position.pixels == scrollController.position.maxScrollExtent) {
-      provider.fetchAnimeList();
+      provider.fetchMangaList();
     }
   }
 
@@ -41,15 +40,15 @@ class HomeViewState extends State<HomeView> {
     scrollController.dispose();
     super.dispose();
   }
-
   @override
   Widget build(BuildContext context) {
-    final animes = context.watch<GlobalProvider>().notAnimes;
+    final mangas = context.watch<GlobalProvider>().notMangas;
+
     return RefreshIndicator(
       backgroundColor: Colors.white,
       color: AppTheme.logoBlue,
       onRefresh: () async {
-        await provider.fetchAnimeList();
+        await provider.fetchMangaList();
       },
       child: SizedBox(
         height: MediaQuery.of(context).size.height,
@@ -65,7 +64,7 @@ class HomeViewState extends State<HomeView> {
                 padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 16),
                 child: Align(
                   alignment: Alignment.topLeft,
-                  child: Text('Trending animes', textAlign: TextAlign.left, style: Theme.of(context).textTheme.headline5!.copyWith(
+                  child: Text('Trending mangas', textAlign: TextAlign.left, style: Theme.of(context).textTheme.headline5!.copyWith(
                     fontWeight: FontWeight.bold
                   )),
                 ),
@@ -73,13 +72,13 @@ class HomeViewState extends State<HomeView> {
               SizedBox(
                 width: double.infinity,
                 height: 350,
-                child: AnimeHorizontalList(animes: provider.trendingAnimes)
+                child: MangasHorizontalList(mangas: provider.trendingMangas),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 16),
                 child: Align(
                   alignment: Alignment.topLeft,
-                  child: Text('Library animes', textAlign: TextAlign.left, style: Theme.of(context).textTheme.headline5!.copyWith(
+                  child: Text('Library mangas', textAlign: TextAlign.left, style: Theme.of(context).textTheme.headline5!.copyWith(
                     fontWeight: FontWeight.bold
                   )),
                 ),
@@ -90,16 +89,16 @@ class HomeViewState extends State<HomeView> {
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   mainAxisExtent: 250,
                   crossAxisCount: 2,
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
+                  crossAxisSpacing: 5,
+                  mainAxisSpacing: 20,
                 ),
-                itemCount: animes.length,
+                itemCount: mangas.length,
                 itemBuilder: (context, index) {
-                  AnimeEntity anime = animes[index];
-                  if(anime.placeholder){
+                  MangaEntity manga = mangas[index];
+                  if(manga.placeholder){
                     return const Skeleton();
                   }
-                  return Animecard(anime: anime);
+                  return MangaCard(manga: manga);
                 },
               ),
               if(provider.isLoading)

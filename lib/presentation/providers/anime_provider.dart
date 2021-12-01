@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:palette_generator/palette_generator.dart';
 import 'package:provider/provider.dart';
 import 'package:wannaanime/domain/entities/anime_entity.dart';
 import 'package:wannaanime/domain/entities/character_entity.dart';
@@ -8,14 +9,13 @@ class AnimeProvider extends ChangeNotifier {
 
   AnimeEntity? _anime;
   List<CharacterEntity>? _characters;
+  PaletteGenerator? _paletteGenerator;
 
-  AnimeEntity get anime {
-    return _anime ?? AnimeEntity(id: "", type: "", createdAt: DateTime.now(), updatedAt: DateTime.now(), slug: "", synopsis: "", description: "", titles: {}, canonicalTitle: "", abbreviatedTitles: [], favoritesCount: 0, startDate: DateTime.now(), endDate: DateTime.now(), popularityRank: 0, subtype: "", status: "", posterImage: "", episodeCount: 0, showType: "", nsfw: false);
-  }
+  AnimeEntity? get anime => _anime;
 
   List<CharacterEntity> get characters => _characters ?? [];
 
-  set anime(AnimeEntity anime) {
+  set anime(AnimeEntity? anime) {
     _anime = anime;
     notifyListeners();
   }
@@ -25,4 +25,18 @@ class AnimeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  PaletteGenerator? get paletteGenerator {
+    return _paletteGenerator;
+  }
+
+  set paletteGenerator(PaletteGenerator? paletteGenerator) {
+    _paletteGenerator = paletteGenerator;
+    notifyListeners();
+  }
+
+  void clear(){
+    _anime = null;
+    _characters = [];
+    _paletteGenerator = null;
+  }
 }

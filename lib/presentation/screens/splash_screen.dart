@@ -21,6 +21,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
       _controller.forward();
       await globalProvider.fetchAnimeList();
+      await globalProvider.fetchMangaList();
       await _controller.reverse();
       Navigator.pushReplacementNamed(context, '/home');
     });

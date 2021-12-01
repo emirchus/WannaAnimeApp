@@ -2,15 +2,15 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:share/share.dart';
-import 'package:wannaanime/domain/entities/anime_entity.dart';
+import 'package:wannaanime/domain/entities/manga_entity.dart';
 
 
-class AnimeHeader extends StatelessWidget {
+class MangaHeader extends StatelessWidget {
 
-  final AnimeEntity anime;
+  final MangaEntity manga;
   final Color mainColorDark;
 
-  const AnimeHeader({Key? key, required this.anime, required this.mainColorDark}) : super(key: key);
+  const MangaHeader({Key? key, required this.manga, required this.mainColorDark}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -38,13 +38,13 @@ class AnimeHeader extends StatelessWidget {
                       children: [
                         Expanded(
                           flex: 4,
-                          child: Text(anime.canonicalTitle, style: Theme.of(context).textTheme.headline6!.copyWith(color: Colors.white, fontWeight: FontWeight.bold))
+                          child: Text(manga.canonicalTitle, style: Theme.of(context).textTheme.headline6!.copyWith(color: Colors.white, fontWeight: FontWeight.bold))
                         ),
                         Flexible(
                           flex: 1,
                           child: IconButton(
                             onPressed: () async {
-                              await Share.share(anime.canonicalTitle + '\n', subject: anime.canonicalTitle);
+                              await Share.share(manga.canonicalTitle + '\n', subject: manga.canonicalTitle);
                             },
                             icon: const Icon(Icons.share, color: Colors.white,)
                           )
@@ -55,27 +55,25 @@ class AnimeHeader extends StatelessWidget {
                         ),
                       ],
                     ),
+                    const SizedBox(height: 20,),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        if(anime.episodeCount != null)
-                          Text('Episodes: ${anime.episodeCount}', style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.white, fontWeight: FontWeight.bold)),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text('${anime.favoritesCount}', style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.white, fontWeight: FontWeight.bold),),
-                            const Icon(Icons.favorite, color: Colors.white, size: 14,)
-                          ],
-                        ),
-                        if(anime.ageRating != null || anime.ageRating!.trim().isNotEmpty)
-                          Text('Age: ${anime.ageRating}', style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.white, fontWeight: FontWeight.bold)),
-                        if(anime.averageRating != null)
-                          Text('Rating: ${anime.averageRating}', style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.white, fontWeight: FontWeight.bold)),
+                        Text('Chapters: ${manga.chapterCount ?? 'N/A'}', style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.white, fontWeight: FontWeight.bold)),
+                        Text('Volumes: ${manga.volumeCount ?? 'N/A'}', style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.white, fontWeight: FontWeight.bold)),
                       ],
                     ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text('Age: ${manga.ageRating ?? 'N/A'}', style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.white, fontWeight: FontWeight.bold)),
+                        Text('Rating: ${manga.ratingRank ?? 'N/A'}', style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.white, fontWeight: FontWeight.bold)),
+                      ]
+                    ),
                     Center(
-                      child: Text(anime.ageRatingGuide ?? '', textAlign: TextAlign.center, style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.white54, fontWeight: FontWeight.bold)),
+                      child: Text(manga.ageRatingGuide ?? '', textAlign: TextAlign.center, style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.white54, fontWeight: FontWeight.bold)),
                     )
                   ],
                 ),
