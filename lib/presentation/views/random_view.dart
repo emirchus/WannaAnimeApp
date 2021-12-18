@@ -30,17 +30,47 @@ class RandomViewState extends State<RandomView> {
     provider = GlobalProvider.of(context, listen: false);
     animeProvider = AnimeProvider.of(context, listen: false);
 
+
     WidgetsBinding.instance!.addPostFrameCallback(rollAnime);
   }
 
   rollAnime(_) async {
+    ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
     AnimeEntity? anime;
     PaletteGenerator? color;
 
     await Loading.show(context, () async {
       anime = await provider.getRandomAnime();
       if (anime == null) {
-        //TODO: SHOW DIALOG
+        ScaffoldMessenger.of(context).showMaterialBanner(MaterialBanner(
+          backgroundColor: Colors.red,
+          content: const Text(
+            'Anime not found',
+            style: TextStyle(color: Colors.white),
+          ),
+          actions: [
+            TextButton(
+              child: const Text(
+                'Try again',
+                style: TextStyle(color: Colors.white),
+              ),
+              onPressed: () {
+                provider.homeScreenKey.currentState?.tabController.index = 2;
+                provider.notify();
+              },
+            ),
+            TextButton(
+              child: Text(
+                'Close',
+                style: TextStyle(color: Colors.white),
+              ),
+              onPressed: () {
+                //Close Material Banner
+                ScaffoldMessenger.of(provider.homeScreenKey.currentContext!).hideCurrentMaterialBanner();
+              },
+            ),
+          ],
+        ));
         provider.headerColor = Colors.white;
         provider.homeScreenKey.currentState?.tabController.index = 0;
         provider.notify();
@@ -83,7 +113,7 @@ class RandomViewState extends State<RandomView> {
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
             child: Container(
-              color: animeProvider.paletteGenerator!.lightMutedColor!.color.withOpacity(0.5),
+              color: animeProvider.paletteGenerator?.lightMutedColor?.color.withOpacity(0.5),
             ),
           )
         ),
@@ -107,7 +137,7 @@ class RandomViewState extends State<RandomView> {
               const SizedBox(height: 50),
               SizedBox.fromSize(
                 size: const Size(200, 50),
-                child: ButtonComponent('Reroll', LookeaIcons.refresh, primary: animeProvider.paletteGenerator!.lightMutedColor!.color, secondary: animeProvider.paletteGenerator!.lightMutedColor!.titleTextColor, onTap: () => rollAnime(''),)
+                child: ButtonComponent('Reroll', LookeaIcons.refresh, primary: animeProvider.paletteGenerator?.lightMutedColor?.color, secondary: animeProvider.paletteGenerator?.lightMutedColor?.titleTextColor, onTap: () => rollAnime(''),)
               ),
             ],
           )

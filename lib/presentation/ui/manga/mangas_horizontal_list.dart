@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wannaanime/domain/entities/manga_entity.dart';
-import 'package:wannaanime/presentation/widgets/manga_card.dart';
+import 'package:wannaanime/presentation/ui/manga/manga_card.dart';
 
 
 class MangasHorizontalList extends StatelessWidget {

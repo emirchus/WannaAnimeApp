@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:wannaanime/domain/dto/anime_dto.dart';
 import 'package:wannaanime/domain/dto/animes_dto.dart';
 import 'package:wannaanime/domain/dto/characters_dto.dart';
+import 'package:wannaanime/domain/dto/image_dto.dart';
 import 'package:wannaanime/domain/dto/manga_dto.dart';
 import 'package:wannaanime/domain/dto/streamers_dto.dart';
 import 'package:wannaanime/domain/dto/streamings_dto.dart';
@@ -111,6 +112,15 @@ class Services {
       dynamic resBody = json.decode(response.body);
       log(resBody['errors'][0]['detail']);
       return AnimeDTO(message: resBody['errors'][0]['detail'], statusCode: response.statusCode);
+    }
+  }
+
+  static Future<ImageDTO> getImage(url) async {
+    final response = await http.get(Uri.parse(url));
+    if (response.statusCode == 200) {
+      return ImageDTO(message: 'Image fetched successfully', statusCode: 200, image: response.bodyBytes);
+    } else {
+      return ImageDTO(message: 'Image not found', statusCode: response.statusCode);
     }
   }
 

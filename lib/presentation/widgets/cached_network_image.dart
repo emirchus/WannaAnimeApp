@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
-
 class CachedImage extends StatelessWidget {
 
   final double? width, height;
@@ -21,7 +20,9 @@ class CachedImage extends StatelessWidget {
         width: width,
         height: height,
         fit: fit,
+        cacheKey: url,
         alignment: Alignment.center,
+
         placeholder: (context, url) => SizedBox(
           width: width ?? MediaQuery.of(context).size.width * 0.8,
           height: height ?? MediaQuery.of(context).size.width * 0.8,

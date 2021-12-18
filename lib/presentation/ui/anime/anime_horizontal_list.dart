@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wannaanime/domain/entities/anime_entity.dart';
-import 'package:wannaanime/presentation/widgets/anime_card.dart';
+import 'package:wannaanime/presentation/ui/anime/anime_card.dart';
 
 
 class AnimeHorizontalList extends StatelessWidget {
@@ -19,7 +19,12 @@ class AnimeHorizontalList extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 10),
       itemBuilder: (context, index) {
         var anime = animes[index];
-        return Animecard(anime: anime);
+        return Container(
+          width: 280,
+          height: 350,
+          margin: const EdgeInsets.symmetric(horizontal: 10),
+          child: Animecard(anime: anime)
+        );
       },
     );
   }

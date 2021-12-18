@@ -7,10 +7,12 @@ import 'package:wannaanime/domain/entities/anime_entity.dart';
 import 'package:wannaanime/domain/entities/character_entity.dart';
 import 'package:wannaanime/presentation/providers/anime_provider.dart';
 import 'package:wannaanime/presentation/providers/global_provider.dart';
+import 'package:wannaanime/presentation/ui/expand_image.dart';
 import 'package:wannaanime/presentation/widgets/button.dart';
 import 'package:wannaanime/presentation/theme.dart';
-import 'package:wannaanime/presentation/widgets/anime_banner.dart';
-import 'package:wannaanime/presentation/widgets/anime_header.dart';
+import 'package:wannaanime/presentation/ui/banner.dart';
+import 'package:wannaanime/presentation/ui/anime/anime_header.dart';
+import 'package:wannaanime/presentation/widgets/cached_network_image.dart';
 import 'package:wannaanime/presentation/widgets/character_card.dart';
 import 'package:wannaanime/presentation/widgets/scroll_behaviour.dart';
 import 'package:wannaanime/presentation/ui/video_dialog.dart';
@@ -41,7 +43,7 @@ class _AnimeScreenState extends State<AnimeScreen> {
 
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
       AnimeEntity anime = animeProvider.anime!;
-      final colors = animeProvider.paletteGenerator!;
+      final colors = animeProvider.paletteGenerator;
 
       if(anime.id.isEmpty) {
         return Navigator.pop(context);
@@ -56,8 +58,8 @@ class _AnimeScreenState extends State<AnimeScreen> {
       }
       if(mounted){
         setState(() {
-          mainColor = colors.dominantColor?.color ?? ColorBrightness.lighten(AppTheme.logoBlue, .4);
-          secondaryColor = colors.dominantColor?.bodyTextColor ?? ColorBrightness.darken(AppTheme.logoBlue, .4);
+          mainColor = colors?.dominantColor?.color ?? ColorBrightness.lighten(AppTheme.logoBlue, .4);
+          secondaryColor = colors?.dominantColor?.bodyTextColor ?? ColorBrightness.darken(AppTheme.logoBlue, .4);
         });
       }
     });
@@ -87,7 +89,7 @@ class _AnimeScreenState extends State<AnimeScreen> {
       },
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.transparent,
+          backgroundColor: mainColor.withOpacity(.4),
           iconTheme: IconThemeData(color: secondaryColor.withOpacity(1.0)),
           leading: IconButton(
             icon: const Icon(Icons.chevron_left),
@@ -106,7 +108,7 @@ class _AnimeScreenState extends State<AnimeScreen> {
           size: size,
           child: Stack(
             children: [
-              AnimeBanner(animeId: '${anime.canonicalTitle}${anime.id}', imageUrl: anime.posterImage, controller: scrollController),
+              Banners(background: mainColor, animeId: '${anime.canonicalTitle}${anime.id}', imageUrl: anime.posterImage, controller: scrollController),
               Positioned(
                 top: (size.width * 9 / 16) - 50,
                 width: size.width,
@@ -154,6 +156,26 @@ class _AnimeScreenState extends State<AnimeScreen> {
                         ),
                         const SizedBox(height: 20,),
                       ],
+                      Text('Arts', style: Theme.of(context).textTheme.headline6!.copyWith(color: secondaryColor, fontWeight: FontWeight.bold)),
+                      SizedBox(
+                        width: size.width,
+                        height: 100,
+                        child: SingleChildScrollView(
+                          child: Row(
+                            children: [
+                              GestureDetector(
+                                onTap: () => ExpandImage.show(context, anime.coverImage ?? anime.posterImage),
+                                child: CachedImage(
+                                  anime.coverImage ?? anime.posterImage,
+                                  width: 100,
+                                  height: 100,
+                                  fit: BoxFit.cover,
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
                       Text('Characters', style: Theme.of(context).textTheme.headline6!.copyWith(color: secondaryColor, fontWeight: FontWeight.bold)),
                       if (animeProvider.characters.isEmpty) Text('no characters found TwT', textAlign: TextAlign.center, style: Theme.of(context).textTheme.headline6!.copyWith(
                         color: secondaryColor,
@@ -161,6 +183,7 @@ class _AnimeScreenState extends State<AnimeScreen> {
                       if (animeProvider.characters.isNotEmpty)
                         GridView.builder(
                           shrinkWrap: true,
+                          padding: const EdgeInsets.only(top: 10),
                           physics: const NeverScrollableScrollPhysics(),
                           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 3,
@@ -184,7 +207,7 @@ class _AnimeScreenState extends State<AnimeScreen> {
             ]
           ),
         )
-   ),
+      ),
     );
   }
 }

@@ -1,21 +1,23 @@
 import 'dart:ui';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:wannaanime/presentation/widgets/cached_network_image.dart';
+import 'package:wannaanime/presentation/ui/expand_image.dart';
 
 
-class AnimeBanner extends StatefulWidget {
+class Banners extends StatefulWidget {
 
   final String animeId;
   final String imageUrl;
   final ScrollController controller;
+  final Color background;
 
-  const AnimeBanner({Key? key, required this.animeId, required this.imageUrl, required this.controller}) : super(key: key);
+  const Banners({Key? key, required this.animeId, required this.background, required this.imageUrl, required this.controller}) : super(key: key);
   @override
-  State<AnimeBanner> createState() => _AnimeBannerState();
+  State<Banners> createState() => _BannersState();
 }
 
-class _AnimeBannerState extends State<AnimeBanner> {
+class _BannersState extends State<Banners> {
 
   late ScrollController scrollController;
   double progress = 0;
@@ -43,8 +45,6 @@ class _AnimeBannerState extends State<AnimeBanner> {
 
     final size = MediaQuery.of(context).size;
 
-    var sigma = (10 * (progress / 2) ).clamp(0.0, 10.0);
-
     return ClipRRect(
       child: Hero(
         tag: widget.animeId,
@@ -52,18 +52,19 @@ class _AnimeBannerState extends State<AnimeBanner> {
           duration: const Duration(milliseconds: 10),
           curve: Curves.ease,
           scale: (8 * progress).clamp(1, 2),
-          child: AspectRatio(
-            aspectRatio: 16/16,
-            child: ImageFiltered(
-              imageFilter: ImageFilter.blur(sigmaX: sigma, sigmaY: sigma),
-              child: CachedImage(
-                widget.imageUrl,
+          child: Container(
+            width: size.width,
+            height: size.width * 16 / 16,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: CachedNetworkImageProvider(widget.imageUrl),
                 fit: BoxFit.cover,
-                width: size.width,
-                height: size.width * 16 / 16,
               ),
             ),
-          ),
+            child: Container(
+              color: widget.background.withOpacity((progress * 5.0).clamp(0.0, 1.0)),
+            ),
+          )
         ),
       ),
     );

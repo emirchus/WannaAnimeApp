@@ -1,8 +1,12 @@
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:share/share.dart';
+import 'package:wannaanime/common/download_image.dart';
 import 'package:wannaanime/domain/entities/anime_entity.dart';
+import 'package:wannaanime/presentation/widgets/lookea_icons.dart';
+import 'package:intl/intl.dart';
 
 
 class AnimeHeader extends StatelessWidget {
@@ -44,14 +48,23 @@ class AnimeHeader extends StatelessWidget {
                           flex: 1,
                           child: IconButton(
                             onPressed: () async {
-                              await Share.share(anime.canonicalTitle + '\n', subject: anime.canonicalTitle);
+                              File? file = await DownloadFile.download(anime.posterImage);
+                              if(file == null) return;//TODO: ERROR LOG
+                              await Share.shareFiles(
+                                [
+                                  file.path
+                                ],
+                                text: 'Hey! Check out this anime I found on WannaAnime!\n${anime.canonicalTitle}',
+                                subject: anime.canonicalTitle,
+
+                              );
                             },
-                            icon: const Icon(Icons.share, color: Colors.white,)
+                            icon: const Icon(LookeaIcons.share_alt, color: Colors.white,)
                           )
                         ),
                         Flexible(
                           flex: 1,
-                          child: IconButton(onPressed: (){}, icon: const Icon(Icons.favorite_border, color: Colors.white,))
+                          child: IconButton(onPressed: (){}, icon: const Icon(LookeaIcons.download_alt, color: Colors.white,))
                         ),
                       ],
                     ),
@@ -60,11 +73,11 @@ class AnimeHeader extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         if(anime.episodeCount != null)
-                          Text('Episodes: ${anime.episodeCount}', style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.white, fontWeight: FontWeight.bold)),
+                          Text('Ep: ${NumberFormat.compact().format(anime.episodeCount)}', style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.white, fontWeight: FontWeight.bold)),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Text('${anime.favoritesCount}', style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.white, fontWeight: FontWeight.bold),),
+                            Text(NumberFormat.compact().format(anime.favoritesCount), style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.white, fontWeight: FontWeight.bold),),
                             const Icon(Icons.favorite, color: Colors.white, size: 14,)
                           ],
                         ),

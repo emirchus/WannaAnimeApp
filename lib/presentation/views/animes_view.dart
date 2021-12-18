@@ -1,23 +1,27 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:palette_generator/palette_generator.dart';
 import 'package:provider/src/provider.dart';
-import 'package:wannaanime/domain/entities/anime_entity.dart';
+import 'package:wannaanime/presentation/providers/anime_provider.dart';
 import 'package:wannaanime/presentation/providers/global_provider.dart';
 import 'package:wannaanime/presentation/theme.dart';
-import 'package:wannaanime/presentation/widgets/anime_card.dart';
-import 'package:wannaanime/presentation/widgets/anime_horizontal_list.dart';
+import 'package:wannaanime/presentation/ui/anime/anime_horizontal_list.dart';
+import 'package:wannaanime/presentation/ui/loading.dart';
+import 'package:wannaanime/presentation/widgets/horizontal_card.dart';
 import 'package:wannaanime/presentation/widgets/skeleton.dart';
 
 
-class HomeView extends StatefulWidget {
+class AnimesView extends StatefulWidget {
 
-  const HomeView({Key? key}) : super(key: key);
+  const AnimesView({Key? key}) : super(key: key);
 
   @override
-  State<HomeView> createState() => HomeViewState();
+  State<AnimesView> createState() => AnimesViewState();
 }
 
-class HomeViewState extends State<HomeView> {
+class AnimesViewState extends State<AnimesView> {
   late GlobalProvider provider;
+  late AnimeProvider animeProvider;
   final ScrollController scrollController = ScrollController();
 
 
@@ -25,7 +29,7 @@ class HomeViewState extends State<HomeView> {
   void initState() {
     super.initState();
     provider = GlobalProvider.of(context, listen: false);
-
+    animeProvider = AnimeProvider.of(context, listen: false);
     scrollController.addListener(onScroll);
   }
 
@@ -55,6 +59,7 @@ class HomeViewState extends State<HomeView> {
         height: MediaQuery.of(context).size.height,
         child: SingleChildScrollView(
           controller: scrollController,
+          padding: const EdgeInsets.only(bottom: 140),
           physics: const AlwaysScrollableScrollPhysics(
             parent: BouncingScrollPhysics(),
           ),
@@ -84,26 +89,21 @@ class HomeViewState extends State<HomeView> {
                   )),
                 ),
               ),
-              GridView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  mainAxisExtent: 250,
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
-                ),
-                itemCount: animes.length,
-                itemBuilder: (context, index) {
-                  AnimeEntity anime = animes[index];
-                  if(anime.placeholder){
-                    return const Skeleton();
-                  }
-                  return Animecard(anime: anime);
-                },
-              ),
-              if(provider.isLoading)
-                const Center(child: CircularProgressIndicator())
+              ...animes.map((anime) {
+                if(anime.placeholder){
+                  return const Skeleton();
+                }
+                return HorizontalCard(imageUrl: anime.posterImage, title: anime.canonicalTitle, description: anime.description, onTap: () async {
+                  animeProvider.anime = anime;
+                  await Loading.show(context, () async {
+                    animeProvider.paletteGenerator = await PaletteGenerator.fromImageProvider(
+                      CachedNetworkImageProvider(anime.posterImage),
+                    );
+                    animeProvider.characters = await provider.fetchCharacterByAnime(anime.id);
+                  });
+                  Navigator.pushNamed(context, '/anime');
+                });
+              }),
             ]
           ),
         ),

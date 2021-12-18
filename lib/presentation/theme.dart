@@ -39,7 +39,7 @@ class AppTheme {
         primary: primaryTextColor,
       ),
     ),
-    canvasColor: primaryColor,
+    canvasColor: Colors.white,
     colorScheme: const ColorScheme.light(
       primary: logoBlue,
       secondary: logoRed,

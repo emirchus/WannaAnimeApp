@@ -7,7 +7,7 @@ import 'package:wannaanime/presentation/screens/manga_screen.dart';
 import 'package:wannaanime/presentation/screens/splash_screen.dart';
 import 'package:wannaanime/presentation/theme.dart';
 
-class Application extends StatelessWidget {
+class Application extends StatelessWidget{
   const Application({Key? key}) : super(key: key);
 
   @override

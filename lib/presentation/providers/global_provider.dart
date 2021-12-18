@@ -95,8 +95,8 @@ class GlobalProvider extends ChangeNotifier {
     return _streamingsAnime[id]!;
   }
 
-  Future<List<MangaEntity>> searchManga(String name) async {
-    List<MangaEntity> result = await _apiRepository.getMangas(search: name.trim());
+  Future<List<MangaEntity>> searchManga(String name, {start = 1, end = 10}) async {
+    List<MangaEntity> result = await _apiRepository.getMangas(search: name.trim(), start: start, end: end);
 
     mangas.addAll(result.where((element) => mangas.where((anime) => anime.id == element.id).isEmpty).toList());
 

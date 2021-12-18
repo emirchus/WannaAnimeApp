@@ -1,10 +1,13 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:palette_generator/palette_generator.dart';
 import 'package:provider/src/provider.dart';
-import 'package:wannaanime/domain/entities/manga_entity.dart';
 import 'package:wannaanime/presentation/providers/global_provider.dart';
+import 'package:wannaanime/presentation/providers/manga_provider.dart';
 import 'package:wannaanime/presentation/theme.dart';
-import 'package:wannaanime/presentation/widgets/manga_card.dart';
-import 'package:wannaanime/presentation/widgets/mangas_horizontal_list.dart';
+import 'package:wannaanime/presentation/ui/loading.dart';
+import 'package:wannaanime/presentation/ui/manga/mangas_horizontal_list.dart';
+import 'package:wannaanime/presentation/widgets/horizontal_card.dart';
 import 'package:wannaanime/presentation/widgets/skeleton.dart';
 
 
@@ -17,6 +20,7 @@ class MangasView extends StatefulWidget {
 
 class MangasViewState extends State<MangasView> {
   late GlobalProvider provider;
+  late MangaProvider mangaProvider;
   final ScrollController scrollController = ScrollController();
 
 
@@ -24,6 +28,7 @@ class MangasViewState extends State<MangasView> {
   void initState() {
     super.initState();
     provider = GlobalProvider.of(context, listen: false);
+    mangaProvider = MangaProvider.of(context, listen: false);
 
     scrollController.addListener(onScroll);
   }
@@ -54,6 +59,7 @@ class MangasViewState extends State<MangasView> {
         height: MediaQuery.of(context).size.height,
         child: SingleChildScrollView(
           controller: scrollController,
+          padding: const EdgeInsets.only(bottom: 140),
           physics: const AlwaysScrollableScrollPhysics(
             parent: BouncingScrollPhysics(),
           ),
@@ -83,26 +89,21 @@ class MangasViewState extends State<MangasView> {
                   )),
                 ),
               ),
-              GridView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  mainAxisExtent: 250,
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 5,
-                  mainAxisSpacing: 20,
-                ),
-                itemCount: mangas.length,
-                itemBuilder: (context, index) {
-                  MangaEntity manga = mangas[index];
+              ...mangas.map((manga) {
                   if(manga.placeholder){
                     return const Skeleton();
                   }
-                  return MangaCard(manga: manga);
-                },
-              ),
-              if(provider.isLoading)
-                const Center(child: CircularProgressIndicator())
+                  return HorizontalCard(imageUrl: manga.imageUrl, title: manga.canonicalTitle, description: manga.description, onTap: () async {
+                    await Loading.show(context, () async {
+                      mangaProvider.manga = manga;
+                      mangaProvider.palette = await PaletteGenerator.fromImageProvider(
+                        CachedNetworkImageProvider(manga.imageUrl),
+                      );
+                    });
+                    Navigator.pushNamed(context, '/manga');
+
+                  });
+              }).toList(),
             ]
           ),
         ),

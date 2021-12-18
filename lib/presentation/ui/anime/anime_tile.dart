@@ -1,5 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:palette_generator/palette_generator.dart';
 import 'package:wannaanime/domain/entities/anime_entity.dart';
 import 'package:wannaanime/presentation/providers/anime_provider.dart';
 import 'package:wannaanime/presentation/providers/global_provider.dart';
@@ -32,9 +34,12 @@ class AnimeTile extends StatelessWidget {
       onTap: () async {
         animeProvider.anime = anime;
         await Loading.show(context, () async {
+          animeProvider.paletteGenerator = await PaletteGenerator.fromImageProvider(
+            CachedNetworkImageProvider(anime.posterImage),
+          );
           animeProvider.characters = await globalProvider.fetchCharacterByAnime(anime.id);
         });
-        Navigator.popAndPushNamed(context, '/anime');
+        Navigator.pushNamed(context, '/anime');
       },
     );
   }

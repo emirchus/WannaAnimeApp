@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:wannaanime/domain/entities/anime_entity.dart';
 import 'package:wannaanime/presentation/providers/global_provider.dart';
-import 'package:wannaanime/presentation/widgets/anime_tile.dart';
+import 'package:wannaanime/presentation/ui/anime/anime_tile.dart';
 import 'package:wannaanime/presentation/widgets/scroll_behaviour.dart';
 
 

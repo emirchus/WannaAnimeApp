@@ -4,42 +4,39 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:palette_generator/palette_generator.dart';
 import 'package:wannaanime/common/colors_brightness.dart';
-import 'package:wannaanime/domain/entities/anime_entity.dart';
-import 'package:wannaanime/presentation/providers/anime_provider.dart';
-import 'package:wannaanime/presentation/providers/global_provider.dart';
+import 'package:wannaanime/domain/entities/manga_entity.dart';
+import 'package:wannaanime/presentation/providers/manga_provider.dart';
 import 'package:wannaanime/presentation/theme.dart';
 import 'package:wannaanime/presentation/ui/loading.dart';
 import 'package:wannaanime/presentation/widgets/cached_network_image.dart';
 
 
-class Animecard extends StatelessWidget {
+class MangaCard extends StatelessWidget {
 
-  final AnimeEntity anime;
+  final MangaEntity manga;
 
-  const Animecard({Key? key, required this.anime}) : super(key: key);
+  const MangaCard({Key? key, required this.manga}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final animeProvider = AnimeProvider.of(context, listen: false);
-    final globalProvider = GlobalProvider.of(context, listen: false);
+    final mangaProvider = MangaProvider.of(context, listen: false);
     return TweenAnimationBuilder<double>(
-      tween: Tween<double>(begin: 0, end: 1),
       duration: const Duration(milliseconds: 500),
-      curve: Curves.ease,
-      builder: (_, value, child) => Opacity(
+      tween: Tween(begin: 0.0, end: 1.0),
+      curve: Curves.easeInOut,
+      builder: (context, value, child) => Opacity(
         opacity: value,
         child: child
       ),
       child: GestureDetector(
         onTap: () async {
-          animeProvider.anime = anime;
           await Loading.show(context, () async {
-            animeProvider.paletteGenerator = await PaletteGenerator.fromImageProvider(
-              CachedNetworkImageProvider(anime.posterImage),
+            mangaProvider.manga = manga;
+            mangaProvider.palette = await PaletteGenerator.fromImageProvider(
+              CachedNetworkImageProvider(manga.imageUrl),
             );
-            animeProvider.characters = await globalProvider.fetchCharacterByAnime(anime.id);
           });
-          Navigator.pushNamed(context, '/anime');
+          Navigator.pushNamed(context, '/manga');
         },
         child: Container(
           width: 280,
@@ -58,9 +55,9 @@ class Animecard extends StatelessWidget {
           child: Stack(
             children: [
               Hero(
-                tag: '${anime.canonicalTitle}${anime.id}',
+                tag: '${manga.canonicalTitle}${manga.id}',
                 child: CachedImage(
-                  anime.posterImage,
+                  manga.imageUrl,
                   fit: BoxFit.cover,
                   width: 280,
                   height: 350,
@@ -89,12 +86,12 @@ class Animecard extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Text(anime.canonicalTitle, textAlign: TextAlign.start, maxLines: 2, overflow: TextOverflow.fade, softWrap: true, style: Theme.of(context).textTheme.subtitle1!.copyWith(
+                            Text(manga.canonicalTitle, textAlign: TextAlign.start, maxLines: 2, overflow: TextOverflow.fade, softWrap: true, style: Theme.of(context).textTheme.subtitle1!.copyWith(
                               fontWeight: FontWeight.bold,
                               color: Colors.white,
                             )),
                             Expanded(
-                              child: Text(anime.synopsis, textAlign: TextAlign.start, maxLines: 4, overflow: TextOverflow.fade, softWrap: true, style: Theme.of(context).textTheme.subtitle2!.copyWith(
+                              child: Text(manga.synopsis, textAlign: TextAlign.start, maxLines: 4, overflow: TextOverflow.fade, softWrap: true, style: Theme.of(context).textTheme.subtitle2!.copyWith(
                                 fontWeight: FontWeight.w500,
                                 color: Colors.white,
                               )),

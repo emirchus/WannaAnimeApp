@@ -9,8 +9,8 @@ import 'package:wannaanime/domain/entities/manga_entity.dart';
 import 'package:wannaanime/presentation/providers/global_provider.dart';
 import 'package:wannaanime/presentation/providers/manga_provider.dart';
 import 'package:wannaanime/presentation/theme.dart';
-import 'package:wannaanime/presentation/widgets/anime_banner.dart';
-import 'package:wannaanime/presentation/widgets/manga_header.dart';
+import 'package:wannaanime/presentation/ui/banner.dart';
+import 'package:wannaanime/presentation/ui/manga/manga_header.dart';
 import 'package:wannaanime/presentation/widgets/scroll_behaviour.dart';
 
 
@@ -37,13 +37,11 @@ class _MangaScreenState extends State<MangaScreen> {
 
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
       MangaEntity manga = mangaProvider.manga;
+      final colors = mangaProvider.palette!;
       if(manga.id.isEmpty) {
         return Navigator.pop(context);
       }
 
-      PaletteGenerator colors = await PaletteGenerator.fromImageProvider(
-        CachedNetworkImageProvider(manga.imageUrl),
-      );
       if(mounted){
         setState(() {
           mainColor = colors.dominantColor?.color ?? ColorBrightness.lighten(AppTheme.logoBlue, .4);
@@ -79,7 +77,7 @@ class _MangaScreenState extends State<MangaScreen> {
         size: size,
         child: Stack(
           children: [
-            AnimeBanner(animeId: '${manga.canonicalTitle}${manga.id}', imageUrl: manga.imageUrl, controller: scrollController),
+            Banners(background: mainColor, animeId: '${manga.canonicalTitle}${manga.id}', imageUrl: manga.imageUrl, controller: scrollController),
             Positioned(
               top: (size.width * 9 / 16) - 50,
               width: size.width,

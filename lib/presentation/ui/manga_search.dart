@@ -1,10 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:wannaanime/domain/entities/anime_entity.dart';
 import 'package:wannaanime/domain/entities/manga_entity.dart';
 import 'package:wannaanime/presentation/providers/global_provider.dart';
-import 'package:wannaanime/presentation/widgets/anime_tile.dart';
-import 'package:wannaanime/presentation/widgets/manga_tile.dart';
+import 'package:wannaanime/presentation/ui/manga/manga_tile.dart';
+import 'package:wannaanime/presentation/widgets/loader_list.dart';
 import 'package:wannaanime/presentation/widgets/scroll_behaviour.dart';
 
 
@@ -49,39 +48,17 @@ class MangaSearchDelegate extends SearchDelegate {
 
     final provider = GlobalProvider.of(context, listen: false);
 
-    return FutureBuilder<List<MangaEntity>>(
-      future: provider.searchManga(query),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: const <Widget>[
-              Center(child: CircularProgressIndicator()),
-            ],
-          );
-        } else if (snapshot.data == null || snapshot.data!.isEmpty) {
-          return Column(
-            children: const <Widget>[
-              Text(
-                "No Results Found.",
-              ),
-            ],
-          );
-        } else {
-          var mangas = snapshot.data!;
-          return ScrollConfiguration(
-            behavior: const NoGlowBehaviour(),
-            child: ListView.builder(
-              itemCount: mangas.length,
-              itemBuilder: (context, index) {
-                final manga = mangas[index];
-                return MangaTile(manga: manga);
-              },
-            ),
-          );
-        }
-      }
+    return LoaderList<MangaEntity>(
+      future: (start, end) async {
+        List<MangaEntity> list = await provider.searchManga(query,start: start+1, end: end);
+        return list;
+      },
+      onData: (data) => {
+        provider.notify()
+      },
+      builder: (context, manga) {
+        return MangaTile(manga: manga);
+      },
     );
 
   }
