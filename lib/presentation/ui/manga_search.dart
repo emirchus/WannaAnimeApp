@@ -1,10 +1,9 @@
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
-import 'package:wannaanime/domain/entities/manga_entity.dart';
+import 'package:wannaanime/domain/entities/manga.dart';
 import 'package:wannaanime/presentation/providers/global_provider.dart';
 import 'package:wannaanime/presentation/ui/manga/manga_tile.dart';
 import 'package:wannaanime/presentation/widgets/loader_list.dart';
-import 'package:wannaanime/presentation/widgets/scroll_behaviour.dart';
 
 
 class MangaSearchDelegate extends SearchDelegate {
@@ -48,9 +47,9 @@ class MangaSearchDelegate extends SearchDelegate {
 
     final provider = GlobalProvider.of(context, listen: false);
 
-    return LoaderList<MangaEntity>(
+    return LoaderList<Manga>(
       future: (start, end) async {
-        List<MangaEntity> list = await provider.searchManga(query,start: start+1, end: end);
+        List<Manga> list = await provider.searchManga(query,start: start+1, end: end);
         return list;
       },
       onData: (data) => {
@@ -67,7 +66,7 @@ class MangaSearchDelegate extends SearchDelegate {
   Widget buildSuggestions(BuildContext context) {
     final provider = GlobalProvider.of(context, listen: false);
 
-    List<MangaEntity> mangas = [...provider.trendingMangas, ...provider.notMangas];
+    List<Manga> mangas = [...provider.trendingMangas, ...provider.notMangas];
 
     return ListView.builder(
       itemCount: mangas.length,

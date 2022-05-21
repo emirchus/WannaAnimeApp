@@ -3,15 +3,15 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:share/share.dart';
-import 'package:wannaanime/common/download_image.dart';
-import 'package:wannaanime/domain/entities/anime_entity.dart';
+import 'package:wannaanime/application/common/download_image.dart';
+import 'package:wannaanime/domain/entities/anime.dart';
 import 'package:wannaanime/presentation/widgets/lookea_icons.dart';
 import 'package:intl/intl.dart';
 
 
 class AnimeHeader extends StatelessWidget {
 
-  final AnimeEntity anime;
+  final Anime anime;
   final Color mainColorDark;
 
   const AnimeHeader({Key? key, required this.anime, required this.mainColorDark}) : super(key: key);
@@ -48,7 +48,7 @@ class AnimeHeader extends StatelessWidget {
                           flex: 1,
                           child: IconButton(
                             onPressed: () async {
-                              File? file = await DownloadFile.download(anime.posterImage);
+                              File? file = await DownloadImage(anime.posterImage).download();
                               if(file == null) return;//TODO: ERROR LOG
                               await Share.shareFiles(
                                 [
@@ -81,7 +81,7 @@ class AnimeHeader extends StatelessWidget {
                             const Icon(Icons.favorite, color: Colors.white, size: 14,)
                           ],
                         ),
-                        if(anime.ageRating != null || anime.ageRating!.trim().isNotEmpty)
+                        if(anime.ageRating != null)
                           Text('Age: ${anime.ageRating}', style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.white, fontWeight: FontWeight.bold)),
                         if(anime.averageRating != null)
                           Text('Rating: ${anime.averageRating}', style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.white, fontWeight: FontWeight.bold)),

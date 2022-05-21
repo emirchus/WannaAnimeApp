@@ -2,9 +2,9 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:provider/src/provider.dart';
-import 'package:wannaanime/common/colors_brightness.dart';
-import 'package:wannaanime/domain/entities/anime_entity.dart';
-import 'package:wannaanime/domain/entities/character_entity.dart';
+import 'package:wannaanime/application/common/colors_brightness.dart';
+import 'package:wannaanime/domain/entities/anime.dart';
+import 'package:wannaanime/domain/entities/character.dart';
 import 'package:wannaanime/presentation/providers/anime_provider.dart';
 import 'package:wannaanime/presentation/providers/global_provider.dart';
 import 'package:wannaanime/presentation/ui/expand_image.dart';
@@ -42,7 +42,7 @@ class _AnimeScreenState extends State<AnimeScreen> {
     animeProvider = AnimeProvider.of(context, listen: false);
 
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
-      AnimeEntity anime = animeProvider.anime!;
+      Anime anime = animeProvider.anime!;
       final colors = animeProvider.paletteGenerator;
 
       if(anime.id.isEmpty) {
@@ -74,7 +74,7 @@ class _AnimeScreenState extends State<AnimeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    AnimeEntity anime = animeProvider.anime!;
+    Anime anime = animeProvider.anime!;
     context.watch<AnimeProvider>();
 
 
@@ -192,7 +192,7 @@ class _AnimeScreenState extends State<AnimeScreen> {
                           ),
                           itemCount: animeProvider.characters.length,
                           itemBuilder: (context, index) {
-                            CharacterEntity characterEntity = animeProvider.characters[index];
+                            Character characterEntity = animeProvider.characters[index];
                             return CharacterCard(
                               character: characterEntity,
                               mainColor: mainColor,

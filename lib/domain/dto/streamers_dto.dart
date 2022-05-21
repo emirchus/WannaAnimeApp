@@ -1,26 +1,20 @@
 import 'dart:convert';
-import 'dart:typed_data';
+import 'package:http/http.dart';
+import 'package:wannaanime/domain/dto/dto.dart';
+import 'package:wannaanime/domain/entities/streamer.dart';
 
-import 'package:wannaanime/domain/entities/streamer_entity.dart';
-
-class StreamersDTO {
-  final int statusCode;
-  final String message;
-  final Uint8List? streamers;
-
+class StreamersDTO extends DTO {
   StreamersDTO({
-    required this.statusCode,
-    required this.message,
-    this.streamers,
-  });
-}
+    required statusCode,
+    required message,
+    data,
+  }) : super(statusCode: statusCode, statusMessage: message, data: data);
 
-extension StreamersMapper on StreamersDTO {
-  List<StreamerEntity>? toStreamers() {
-    if (streamers == null) {
-      return null;
-    }
-    var decode = json.decode(utf8.decode(streamers!));
-    return decode['data'].map<StreamerEntity>((anime) => StreamerEntity.fromMap(anime)).toList();
-  }
+  List<Streamer> get streamersList => statusCode == 200 ? (json.decode(utf8.decode(data!))['data'] as List<dynamic>).map((e) => Streamer.fromMap(e)).toList() : [];
+
+  factory StreamersDTO.fromResponse(Response response) => StreamersDTO(
+        statusCode: response.statusCode,
+        message: json.decode(response.body)?['errors']?[0]?['detail'] ?? "Message not found",
+        data: response.bodyBytes,
+      );
 }

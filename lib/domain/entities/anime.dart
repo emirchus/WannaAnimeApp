@@ -1,7 +1,8 @@
 import 'dart:convert';
 
-class AnimeEntity {
-  final String id;
+import 'package:wannaanime/domain/dto/entity.dart';
+
+class Anime extends Entity {
   final String type;
   final DateTime createdAt;
   final DateTime updatedAt;
@@ -33,8 +34,8 @@ class AnimeEntity {
 
   final bool placeholder;
 
-  AnimeEntity({
-    required this.id,
+  Anime({
+    required id,
     required this.type,
     required this.createdAt,
     required this.updatedAt,
@@ -63,9 +64,9 @@ class AnimeEntity {
     this.youtubeVideoId,
     required this.showType,
     required this.nsfw,
-  }) : placeholder = false;
+  }) : placeholder = false, super(id);
 
-  AnimeEntity.placeholder() : id = '', type = '', createdAt = DateTime.now(), updatedAt = DateTime.now(), slug = '', synopsis = '', description = '', titles = {}, canonicalTitle = '', abbreviatedTitles = [], averageRating = '', favoritesCount = 0, startDate = DateTime.now(), endDate = null, nextRelease = null, popularityRank = 0, subtype = '', status = '', posterImage = '', coverImage = '', showType = '', nsfw = false, placeholder = true;
+  Anime.placeholder() : type = '', createdAt = DateTime.now(), updatedAt = DateTime.now(), slug = '', synopsis = '', description = '', titles = {}, canonicalTitle = '', abbreviatedTitles = [], averageRating = '', favoritesCount = 0, startDate = DateTime.now(), endDate = null, nextRelease = null, popularityRank = 0, subtype = '', status = '', posterImage = '', coverImage = '', showType = '', nsfw = false, placeholder = true, super('');
 
   Map<String, dynamic> toMap() {
     return {
@@ -101,8 +102,8 @@ class AnimeEntity {
     };
   }
 
-  factory AnimeEntity.fromMap(Map<String, dynamic> map) {
-    return AnimeEntity(
+  factory Anime.fromMap(Map<String, dynamic> map) {
+    return Anime(
       id: map['id'],
       type: map['type'],
       createdAt: DateTime.parse(map['attributes']['createdAt']),
@@ -137,5 +138,5 @@ class AnimeEntity {
 
   String toJson() => json.encode(toMap());
 
-  factory AnimeEntity.fromJson(String source) => AnimeEntity.fromMap(json.decode(source));
+  factory Anime.fromJson(String source) => Anime.fromMap(json.decode(source));
 }

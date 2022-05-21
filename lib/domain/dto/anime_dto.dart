@@ -1,24 +1,20 @@
 import 'dart:convert';
-import 'dart:typed_data';
+import 'package:http/http.dart';
+import 'package:wannaanime/domain/dto/dto.dart';
+import 'package:wannaanime/domain/entities/anime.dart';
 
-import 'package:wannaanime/domain/entities/anime_entity.dart';
-
-class AnimeDTO {
-  final int statusCode;
-  final String message;
-  final Uint8List? anime;
-
+class AnimeDTO extends DTO {
   AnimeDTO({
-    required this.statusCode,
-    required this.message,
-    this.anime,
-  });
-}
+    required statusCode,
+    required message,
+    data,
+  }) : super(statusCode: statusCode, statusMessage: message, data: data);
 
-extension AnimeMapper on AnimeDTO {
-  AnimeEntity? toEntity() {
-    if (anime == null) return null;
-    var decode = json.decode(utf8.decode(anime!));
-    return AnimeEntity.fromMap(decode['data']);
-  }
+  Anime? get anime => statusCode == 200 ? Anime.fromMap(json.decode(utf8.decode(data!))['data']) : null;
+
+  factory AnimeDTO.fromResponse(Response response) => AnimeDTO(
+        statusCode: response.statusCode,
+        message: json.decode(response.body)?['errors']?[0]?['detail'] ?? "Message not found",
+        data: response.bodyBytes,
+      );
 }

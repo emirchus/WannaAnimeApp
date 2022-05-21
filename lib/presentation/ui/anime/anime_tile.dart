@@ -1,8 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:palette_generator/palette_generator.dart';
-import 'package:wannaanime/domain/entities/anime_entity.dart';
+import 'package:wannaanime/domain/entities/anime.dart';
 import 'package:wannaanime/presentation/providers/anime_provider.dart';
 import 'package:wannaanime/presentation/providers/global_provider.dart';
 import 'package:wannaanime/presentation/theme.dart';
@@ -12,7 +11,7 @@ import 'package:wannaanime/presentation/widgets/cached_network_image.dart';
 
 class AnimeTile extends StatelessWidget {
 
-  final AnimeEntity anime;
+  final Anime anime;
 
   const AnimeTile({Key? key, required this.anime}) : super(key: key);
 

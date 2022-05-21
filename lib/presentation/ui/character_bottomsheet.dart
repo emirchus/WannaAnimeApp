@@ -1,13 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:wannaanime/common/colors_brightness.dart';
-import 'package:wannaanime/domain/entities/character_entity.dart';
+import 'package:wannaanime/application/common/colors_brightness.dart';
+import 'package:wannaanime/domain/entities/character.dart';
 import 'package:wannaanime/presentation/widgets/scroll_behaviour.dart';
 
 
 class CharacterBottomSheet extends StatelessWidget {
 
-  final CharacterEntity character;
+  final Character character;
   final Color mainColor, secondaryColor;
 
   const CharacterBottomSheet({Key? key, required this.character, required this.mainColor, required this.secondaryColor}) : super(key: key);

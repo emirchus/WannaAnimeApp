@@ -1,6 +1,6 @@
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
-import 'package:wannaanime/domain/entities/anime_entity.dart';
+import 'package:wannaanime/domain/entities/anime.dart';
 import 'package:wannaanime/presentation/providers/global_provider.dart';
 import 'package:wannaanime/presentation/ui/anime/anime_tile.dart';
 import 'package:wannaanime/presentation/widgets/scroll_behaviour.dart';
@@ -47,7 +47,7 @@ class AnimeSearchDelegate extends SearchDelegate {
 
     final provider = GlobalProvider.of(context, listen: false);
 
-    return FutureBuilder<List<AnimeEntity>>(
+    return FutureBuilder<List<Anime>>(
       future: provider.searchAnime(query),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
@@ -88,7 +88,7 @@ class AnimeSearchDelegate extends SearchDelegate {
   Widget buildSuggestions(BuildContext context) {
     final provider = GlobalProvider.of(context, listen: false);
 
-    List<AnimeEntity> animes = [...provider.trendingAnimes, ...provider.notAnimes];
+    List<Anime> animes = [...provider.trendingAnimes, ...provider.notAnimes];
 
     return ListView.builder(
       itemCount: animes.length,

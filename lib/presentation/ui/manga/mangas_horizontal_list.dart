@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:wannaanime/domain/entities/manga_entity.dart';
+import 'package:wannaanime/domain/entities/manga.dart';
 import 'package:wannaanime/presentation/ui/manga/manga_card.dart';
 
 
 class MangasHorizontalList extends StatelessWidget {
 
-  final List<MangaEntity> mangas;
+  final List<Manga> mangas;
 
   const MangasHorizontalList({Key? key, required this.mangas}) : super(key: key);
 

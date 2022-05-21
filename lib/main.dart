@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:wannaanime/application.dart';
-import 'package:wannaanime/injector.dart';
+import 'package:wannaanime/application/application.dart';
+import 'package:wannaanime/application/injector.dart';
 
 void main() async {
 

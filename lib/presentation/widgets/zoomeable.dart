@@ -45,7 +45,7 @@ class _ZoomableState extends State<Zoomable> {
       },
       onScaleUpdate: (ScaleUpdateDetails scaleDetails) {
         var newZoom = (prevZoom * scaleDetails.scale);
-        handleZoom(zoom);
+        handleZoom(newZoom);
       },
       child: Transform.translate(
         offset: offset ?? Offset.zero,

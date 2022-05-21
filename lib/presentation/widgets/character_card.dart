@@ -1,12 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:wannaanime/domain/entities/character_entity.dart';
+import 'package:wannaanime/domain/entities/character.dart';
 import 'package:wannaanime/presentation/ui/character_bottomsheet.dart';
 
 
 class CharacterCard extends StatelessWidget {
 
-  final CharacterEntity character;
+  final Character character;
   final Color mainColor, secondaryColor;
 
   const CharacterCard({Key? key, required this.character, required this.mainColor, required this.secondaryColor}) : super(key: key);

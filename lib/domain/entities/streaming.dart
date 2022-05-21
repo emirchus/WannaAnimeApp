@@ -1,26 +1,24 @@
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
+import 'package:wannaanime/domain/dto/entity.dart';
 
-class StreamingEntity {
-  final String id;
+class Streaming extends Entity {
   final DateTime createdAt; //['attributes']['createdAt']
   final DateTime updatedAt; //['attributes']['updatedAt']
   final String url; //['attributes']['updatedAt']
   final List<String> subs; //['attributes']['subs']
   final List<String> dubs; //['attributes']['dubs ']
 
-  StreamingEntity({
-    required this.id,
+  Streaming({
+    required id,
     required this.createdAt,
     required this.updatedAt,
     required this.url,
     required this.subs,
     required this.dubs,
-  });
+  }) : super(id);
 
-
-  StreamingEntity copyWith({
+  Streaming copyWith({
     String? id,
     DateTime? createdAt,
     DateTime? updatedAt,
@@ -28,7 +26,7 @@ class StreamingEntity {
     List<String>? subs,
     List<String>? dubs,
   }) {
-    return StreamingEntity(
+    return Streaming(
       id: id ?? this.id,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
@@ -49,8 +47,8 @@ class StreamingEntity {
     };
   }
 
-  factory StreamingEntity.fromMap(Map<String, dynamic> map) {
-    return StreamingEntity(
+  factory Streaming.fromMap(Map<String, dynamic> map) {
+    return Streaming(
       id: map['id'],
       createdAt: DateTime.parse(map['attributes']['createdAt']),
       updatedAt: DateTime.parse(map['attributes']['updatedAt']),
@@ -62,7 +60,7 @@ class StreamingEntity {
 
   String toJson() => json.encode(toMap());
 
-  factory StreamingEntity.fromJson(String source) => StreamingEntity.fromMap(json.decode(source));
+  factory Streaming.fromJson(String source) => Streaming.fromMap(json.decode(source));
 
   @override
   String toString() {
@@ -73,22 +71,11 @@ class StreamingEntity {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is StreamingEntity &&
-      other.id == id &&
-      other.createdAt == createdAt &&
-      other.updatedAt == updatedAt &&
-      other.url == url &&
-      listEquals(other.subs, subs) &&
-      listEquals(other.dubs, dubs);
+    return other is Streaming && other.id == id;
   }
 
   @override
   int get hashCode {
-    return id.hashCode ^
-      createdAt.hashCode ^
-      updatedAt.hashCode ^
-      url.hashCode ^
-      subs.hashCode ^
-      dubs.hashCode;
+    return id.hashCode;
   }
 }

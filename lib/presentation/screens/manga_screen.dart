@@ -1,18 +1,14 @@
 import 'dart:ui';
-
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:palette_generator/palette_generator.dart';
 import 'package:provider/src/provider.dart';
-import 'package:wannaanime/common/colors_brightness.dart';
-import 'package:wannaanime/domain/entities/manga_entity.dart';
+import 'package:wannaanime/application/common/colors_brightness.dart';
+import 'package:wannaanime/domain/entities/manga.dart';
 import 'package:wannaanime/presentation/providers/global_provider.dart';
 import 'package:wannaanime/presentation/providers/manga_provider.dart';
 import 'package:wannaanime/presentation/theme.dart';
 import 'package:wannaanime/presentation/ui/banner.dart';
 import 'package:wannaanime/presentation/ui/manga/manga_header.dart';
 import 'package:wannaanime/presentation/widgets/scroll_behaviour.dart';
-
 
 class MangaScreen extends StatefulWidget {
   const MangaScreen({Key? key}) : super(key: key);
@@ -22,7 +18,6 @@ class MangaScreen extends StatefulWidget {
 }
 
 class _MangaScreenState extends State<MangaScreen> {
-
   late Color mainColor = ColorBrightness.lighten(AppTheme.logoBlue, .4);
   late Color secondaryColor = ColorBrightness.darken(AppTheme.logoBlue, .4);
   final ScrollController scrollController = ScrollController();
@@ -36,34 +31,31 @@ class _MangaScreenState extends State<MangaScreen> {
     mangaProvider = MangaProvider.of(context, listen: false);
 
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
-      MangaEntity manga = mangaProvider.manga;
+      Manga manga = mangaProvider.manga;
       final colors = mangaProvider.palette!;
-      if(manga.id.isEmpty) {
+      if (manga.id.isEmpty) {
         return Navigator.pop(context);
       }
 
-      if(mounted){
+      if (mounted) {
         setState(() {
           mainColor = colors.dominantColor?.color ?? ColorBrightness.lighten(AppTheme.logoBlue, .4);
           secondaryColor = colors.dominantColor?.bodyTextColor ?? ColorBrightness.darken(AppTheme.logoBlue, .4);
         });
-
       }
-
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
-    MangaEntity manga = mangaProvider.manga;
+    Manga manga = mangaProvider.manga;
     context.watch<MangaProvider>();
 
     final size = MediaQuery.of(context).size;
     final mainColorDark = ColorBrightness.darken(AppTheme.logoBlue, 1);
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: mainColor.withOpacity(.4),
         iconTheme: IconThemeData(color: secondaryColor.withOpacity(1.0)),
         leading: IconButton(
           icon: const Icon(Icons.chevron_left),
@@ -112,14 +104,13 @@ class _MangaScreenState extends State<MangaScreen> {
                     MangaHeader(manga: manga, mainColorDark: mainColorDark),
                     Text('Synopsis', style: Theme.of(context).textTheme.headline6!.copyWith(color: secondaryColor, fontWeight: FontWeight.w900)),
                     Text(manga.description, style: Theme.of(context).textTheme.bodyText1!.copyWith(color: secondaryColor)),
-
                   ],
                 ),
-              )
+              ),
             ),
-          ]
+          ],
         ),
-      )
-   );
+      ),
+    );
   }
 }

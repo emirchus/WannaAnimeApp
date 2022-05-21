@@ -3,14 +3,14 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:share/share.dart';
-import 'package:wannaanime/common/download_image.dart';
-import 'package:wannaanime/domain/entities/manga_entity.dart';
+import 'package:wannaanime/application/common/download_image.dart';
+import 'package:wannaanime/domain/entities/manga.dart';
 import 'package:wannaanime/presentation/widgets/lookea_icons.dart';
 
 
 class MangaHeader extends StatelessWidget {
 
-  final MangaEntity manga;
+  final Manga manga;
   final Color mainColorDark;
 
   const MangaHeader({Key? key, required this.manga, required this.mainColorDark}) : super(key: key);
@@ -47,7 +47,7 @@ class MangaHeader extends StatelessWidget {
                           flex: 1,
                           child: IconButton(
                             onPressed: () async {
-                              File? file = await DownloadFile.download(manga.imageUrl);
+                              File? file = await DownloadImage(manga.imageUrl).download();
                               if(file == null) return;//TODO: ERROR LOG
                               await Share.shareFiles(
                                 [

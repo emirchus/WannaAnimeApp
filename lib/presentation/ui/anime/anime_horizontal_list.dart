@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:wannaanime/domain/entities/anime_entity.dart';
+import 'package:wannaanime/domain/entities/anime.dart';
 import 'package:wannaanime/presentation/ui/anime/anime_card.dart';
 
 
 class AnimeHorizontalList extends StatelessWidget {
 
-  final List<AnimeEntity> animes;
+  final List<Anime> animes;
 
   const AnimeHorizontalList({Key? key, required this.animes}) : super(key: key);
 

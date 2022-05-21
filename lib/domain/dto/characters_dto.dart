@@ -1,26 +1,21 @@
 import 'dart:convert';
-import 'dart:typed_data';
 
-import 'package:wannaanime/domain/entities/character_entity.dart';
+import 'package:http/http.dart';
+import 'package:wannaanime/domain/dto/dto.dart';
+import 'package:wannaanime/domain/entities/character.dart';
 
-class CharactersDTO {
-  final int statusCode;
-  final String message;
-  final Uint8List? characters;
-
+class CharactersDTO extends DTO {
   CharactersDTO({
-    required this.statusCode,
-    required this.message,
-    this.characters,
-  });
-}
+    required statusCode,
+    required message,
+    data,
+  }) : super(statusCode: statusCode, statusMessage: message, data: data);
 
-extension CharactersMapper on CharactersDTO {
-  List<CharacterEntity>? toCharacters() {
-    if (characters == null) {
-      return null;
-    }
-    var decode = json.decode(utf8.decode(characters!));
-    return decode['included']?.where((r) => r['type'] == 'characters').toList().map<CharacterEntity>((character) => CharacterEntity.fromMap(character)).toList();
-  }
+  List<Character> get characters => statusCode == 200 ? json.decode(utf8.decode(data!))['included'].where((r) => r['type'] == 'characters').toList().map<Character>((character) => Character.fromMap(character)).toList() : [];
+
+  factory CharactersDTO.fromResponse(Response response) => CharactersDTO(
+        statusCode: response.statusCode,
+        message: json.decode(response.body)?['errors']?[0]?['detail'] ?? "Message not found",
+        data: response.bodyBytes,
+      );
 }

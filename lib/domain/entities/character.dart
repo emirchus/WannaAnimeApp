@@ -1,7 +1,8 @@
 import 'dart:convert';
 
-class CharacterEntity {
-  final String id;
+import 'package:wannaanime/domain/dto/entity.dart';
+
+class Character extends Entity {
   final String role; //
 
   final String canonicalName; //['included'][0]['attributes']['canonicalName']
@@ -10,15 +11,15 @@ class CharacterEntity {
   final Map<String, String>? names;
   final List<String>? otherNames;
 
-  CharacterEntity({
-    required this.id,
+  Character({
+    required id,
     required this.role,
     required this.canonicalName,
     required this.description,
     required this.image,
     required this.names,
     required this.otherNames,
-  });
+  }) : super(id);
 
   Map<String, dynamic> toMap() {
     return {
@@ -30,10 +31,10 @@ class CharacterEntity {
     };
   }
 
-  factory CharacterEntity.fromMap(Map<String, dynamic> map) {
-    return CharacterEntity(
+  factory Character.fromMap(Map<String, dynamic> map) {
+    return Character(
       id: map['id'],
-      role:  '',
+      role: '',
       canonicalName: map['attributes']['canonicalName'],
       names: (map['attributes']['names']..removeWhere((key, value) => value == null)).cast<String, String>(),
       otherNames: map['attributes']['otherNames'].cast<String>(),
@@ -44,7 +45,7 @@ class CharacterEntity {
 
   String toJson() => json.encode(toMap());
 
-  factory CharacterEntity.fromJson(String source) => CharacterEntity.fromMap(json.decode(source));
+  factory Character.fromJson(String source) => Character.fromMap(json.decode(source));
 
   @override
   String toString() {
@@ -55,20 +56,11 @@ class CharacterEntity {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is CharacterEntity &&
-      other.id == id &&
-      other.role == role &&
-      other.canonicalName == canonicalName &&
-      other.description == description &&
-      other.image == image;
+    return other is Character && other.id == id;
   }
 
   @override
   int get hashCode {
-    return id.hashCode ^
-      role.hashCode ^
-      canonicalName.hashCode ^
-      description.hashCode ^
-      image.hashCode;
+    return id.hashCode;
   }
 }

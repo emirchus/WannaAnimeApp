@@ -7,9 +7,10 @@ import 'package:wannaanime/presentation/providers/manga_provider.dart';
 import 'package:wannaanime/presentation/theme.dart';
 import 'package:wannaanime/presentation/ui/loading.dart';
 import 'package:wannaanime/presentation/ui/manga/mangas_horizontal_list.dart';
+import 'package:wannaanime/presentation/ui/manga_search.dart';
 import 'package:wannaanime/presentation/widgets/horizontal_card.dart';
+import 'package:wannaanime/presentation/widgets/lookea_icons.dart';
 import 'package:wannaanime/presentation/widgets/skeleton.dart';
-
 
 class MangasView extends StatefulWidget {
   const MangasView({Key? key}) : super(key: key);
@@ -18,11 +19,10 @@ class MangasView extends StatefulWidget {
   State<MangasView> createState() => MangasViewState();
 }
 
-class MangasViewState extends State<MangasView> {
+class MangasViewState extends State<MangasView> with AutomaticKeepAliveClientMixin {
   late GlobalProvider provider;
   late MangaProvider mangaProvider;
   final ScrollController scrollController = ScrollController();
-
 
   @override
   void initState() {
@@ -45,10 +45,11 @@ class MangasViewState extends State<MangasView> {
     scrollController.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     final mangas = context.watch<GlobalProvider>().notMangas;
-
+    super.build(context);
     return RefreshIndicator(
       backgroundColor: Colors.white,
       color: AppTheme.logoBlue,
@@ -70,9 +71,7 @@ class MangasViewState extends State<MangasView> {
                 padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 16),
                 child: Align(
                   alignment: Alignment.topLeft,
-                  child: Text('Trending mangas', textAlign: TextAlign.left, style: Theme.of(context).textTheme.headline5!.copyWith(
-                    fontWeight: FontWeight.bold
-                  )),
+                  child: Text('Trending mangas', textAlign: TextAlign.left, style: Theme.of(context).textTheme.headline5!.copyWith(fontWeight: FontWeight.bold)),
                 ),
               ),
               SizedBox(
@@ -80,20 +79,37 @@ class MangasViewState extends State<MangasView> {
                 height: 350,
                 child: MangasHorizontalList(mangas: provider.trendingMangas),
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 16),
-                child: Align(
-                  alignment: Alignment.topLeft,
-                  child: Text('Library mangas', textAlign: TextAlign.left, style: Theme.of(context).textTheme.headline5!.copyWith(
-                    fontWeight: FontWeight.bold
-                  )),
-                ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 16),
+                    child: Align(
+                      alignment: Alignment.topLeft,
+                      child: Text('Library mangas', textAlign: TextAlign.left, style: Theme.of(context).textTheme.headline5!.copyWith(fontWeight: FontWeight.bold)),
+                    ),
+                  ),
+                  IconButton(
+                    icon: const Icon(LookeaIcons.search),
+                    onPressed: () async {
+                      await showSearch(
+                        context: context,
+                        delegate: MangaSearchDelegate(),
+                      );
+                    },
+                  ),
+                ],
               ),
               ...mangas.map((manga) {
-                  if(manga.placeholder){
-                    return const Skeleton();
-                  }
-                  return HorizontalCard(imageUrl: manga.imageUrl, title: manga.canonicalTitle, description: manga.description, onTap: () async {
+                if (manga.placeholder) {
+                  return const Skeleton();
+                }
+                return HorizontalCard(
+                  imageUrl: manga.imageUrl,
+                  title: manga.canonicalTitle,
+                  description: manga.description,
+                  onTap: () async {
                     await Loading.show(context, () async {
                       mangaProvider.manga = manga;
                       mangaProvider.palette = await PaletteGenerator.fromImageProvider(
@@ -101,13 +117,16 @@ class MangasViewState extends State<MangasView> {
                       );
                     });
                     Navigator.pushNamed(context, '/manga');
-
-                  });
+                  },
+                );
               }).toList(),
-            ]
+            ],
           ),
         ),
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

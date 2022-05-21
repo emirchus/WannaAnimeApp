@@ -1,26 +1,26 @@
 import 'package:flutter/widgets.dart';
 import 'package:palette_generator/palette_generator.dart';
 import 'package:provider/provider.dart';
-import 'package:wannaanime/domain/entities/anime_entity.dart';
-import 'package:wannaanime/domain/entities/character_entity.dart';
+import 'package:wannaanime/domain/entities/anime.dart';
+import 'package:wannaanime/domain/entities/character.dart';
 
 class AnimeProvider extends ChangeNotifier {
   static AnimeProvider of(BuildContext context, {listen = true}) => Provider.of(context, listen: listen);
 
-  AnimeEntity? _anime;
-  List<CharacterEntity>? _characters;
+  Anime? _anime;
+  List<Character>? _characters;
   PaletteGenerator? _paletteGenerator;
 
-  AnimeEntity? get anime => _anime;
+  Anime? get anime => _anime;
 
-  List<CharacterEntity> get characters => _characters ?? [];
+  List<Character> get characters => _characters ?? [];
 
-  set anime(AnimeEntity? anime) {
+  set anime(Anime? anime) {
     _anime = anime;
     notifyListeners();
   }
 
-  set characters(List<CharacterEntity> characters) {
+  set characters(List<Character> characters) {
     _characters = characters;
     notifyListeners();
   }

@@ -1,7 +1,9 @@
 import 'dart:convert';
 
-class MangaEntity {
-  final String id;
+import 'package:wannaanime/domain/dto/entity.dart';
+
+class Manga extends Entity{
+
   final String slug;
   final String synopsis;
   final String description;
@@ -16,8 +18,8 @@ class MangaEntity {
   final int? volumeCount;
   final bool placeholder;
 
-  MangaEntity({
-    required this.id,
+  Manga({
+    required id,
     required this.slug,
     this.synopsis = '',
     this.description = '',
@@ -30,10 +32,10 @@ class MangaEntity {
     required this.imageUrl,
     this.chapterCount,
     this.volumeCount
-  }) : placeholder = false;
+  }) : placeholder = false, super(id);
 
-  MangaEntity.placeholder({
-    this.id = '',
+  Manga.placeholder({
+    id = '',
     this.slug = '',
     this.synopsis = '',
     this.description = '',
@@ -46,7 +48,7 @@ class MangaEntity {
     this.imageUrl = '',
     this.chapterCount,
     this.volumeCount
-  }) : placeholder = true;
+  }) : placeholder = true, super(id);
 
   Map<String, dynamic> toMap() {
     return {
@@ -64,8 +66,8 @@ class MangaEntity {
     };
   }
 
-  factory MangaEntity.fromMap(Map<String, dynamic> map) {
-    return MangaEntity(
+  factory Manga.fromMap(Map<String, dynamic> map) {
+    return Manga(
       id: map['id'],
       slug: map['attributes']['slug'],
       synopsis: map['attributes']['synopsis'] ?? '',
@@ -84,7 +86,7 @@ class MangaEntity {
 
   String toJson() => json.encode(toMap());
 
-  factory MangaEntity.fromJson(String source) => MangaEntity.fromMap(json.decode(source));
+  factory Manga.fromJson(String source) => Manga.fromMap(json.decode(source));
 
   @override
   String toString() {
@@ -95,7 +97,7 @@ class MangaEntity {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is MangaEntity &&
+    return other is Manga &&
       other.id == id &&
       other.slug == slug &&
       other.synopsis == synopsis &&
